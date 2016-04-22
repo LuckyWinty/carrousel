@@ -48,6 +48,8 @@ Carousel.prototype={
 		this.nextBtn.style.height=this.Settings.height+'px';
 
 		this.carrouselFir.style.left=btnW+'px';
+		this.carrouselFir.style.width=this.settings.carrouselWidth+'px';
+		this.carrouselFir.style.height=this.settings.carrouselHeight+'px';
 
 	},
 	//获取DOM中的配置参数

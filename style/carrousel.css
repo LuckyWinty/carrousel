@@ -1,0 +1,37 @@
+.carrousel-main{
+	position: relative;
+	width:1000px;
+	height:400px;
+	overflow: hidden;
+}
+.carrousel-main .carrousel-list{
+	width:inherit;
+	height:inherit;
+}
+.carrousel-main .carrousel-list a,.carrousel-main .carrousel-list a img{
+	display: block;
+	width:800px;
+	height:400px;
+}
+.carrousel-btn{
+	position: absolute;
+	top:0px;
+	width:100px;
+	height:400px;
+	background-color: pink;
+	cursor: pointer;
+	z-index: 10;
+}
+/*左右按钮*/
+.carrousel-btn-pre{
+	left:0px;
+}
+.carrousel-btn-next{
+	right:0px;
+}
+/*列表*/
+.carrousel-main .carrousel-list .carrousel-item{
+	position: absolute;
+	top:0px;
+	left: 0px;
+}

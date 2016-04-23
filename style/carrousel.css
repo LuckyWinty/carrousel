@@ -2,7 +2,7 @@
 	position: relative;
 	width:1000px;
 	height:400px;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 .carrousel-main .carrousel-list{
 	width:inherit;
@@ -10,8 +10,8 @@
 }
 .carrousel-main .carrousel-list a,.carrousel-main .carrousel-list a img{
 	display: block;
-	width:800px;
-	height:400px;
+	width:inherit;
+	height:inherit;
 }
 .carrousel-btn{
 	position: absolute;

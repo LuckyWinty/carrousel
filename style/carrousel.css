@@ -20,6 +20,7 @@
 	height:400px;
 	background-color: pink;
 	cursor: pointer;
+	opacity: 0.5;
 	z-index: 10;
 }
 /*左右按钮*/

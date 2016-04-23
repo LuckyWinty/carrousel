@@ -10,6 +10,8 @@
    this.nextBtn=this.carrousel.querySelector('.carrousel-btn-next');
    //获取第一张图片
    this.carrouselFir=this.carrousel.querySelector('.carrousel-list').firstElementChild;
+   //获取图片数量
+   this.carrouselItemLen=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
    //默认参数配置
    this.Settings={
    	width:1000,  //幻灯片的宽度
@@ -25,6 +27,7 @@
    	// console.log(this.Settings);
    }
    this.setValue();
+
 }
 Carousel.init=function(carrousels){
 	var _this=this;
@@ -43,13 +46,16 @@ Carousel.prototype={
 		var btnW=(this.Settings.width-this.Settings.carrouselWidth)/2;
 		this.preBtn.style.width=btnW+'px';
 		this.preBtn.style.height=this.Settings.height+'px';
+		this.preBtn.style.zIndex=Math.ceil(this.carrouselItemLen.length/2);
 
 		this.nextBtn.style.width=btnW+'px';
 		this.nextBtn.style.height=this.Settings.height+'px';
+		this.nextBtn.style.zIndex=Math.ceil(this.carrouselItemLen.length/2);
 
 		this.carrouselFir.style.left=btnW+'px';
-		this.carrouselFir.style.width=this.settings.carrouselWidth+'px';
-		this.carrouselFir.style.height=this.settings.carrouselHeight+'px';
+		this.carrouselFir.style.width=this.Settings.carrouselWidth+'px';
+		this.carrouselFir.style.height=this.Settings.carrouselHeight+'px';
+		this.carrouselFir.style.zIndex=Math.floor(this.carrouselItemLen.length/2);
 
 	},
 	//获取DOM中的配置参数

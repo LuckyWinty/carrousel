@@ -6,15 +6,20 @@
 		var calSelf=this;
    //保存单个旋转图片对象
    this.carrousel=carrousel;
+   this.carrouselItemMain=this.carrousel.querySelector('.carrousel-list');
    //获取左右按钮
    this.preBtn=this.carrousel.querySelector('.carrousel-btn-pre');
    this.nextBtn=this.carrousel.querySelector('.carrousel-btn-next');
+      //获取图片数量
+   this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
+   if(this.carrouselItems.length%2==0){//偶数帧的时候，克隆第一个加到最后，形成奇数的形式
+      this.carrouselItemMain.appendChild(this.carrousel.querySelector('.carrousel-list').firstElementChild.cloneNode(true));
+      this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
+   };
    //获取第一张图片
    this.carrouselFir=this.carrousel.querySelector('.carrousel-list').firstElementChild;
    //获取最后一张图片
    this.carrouselLat=this.carrousel.querySelector('.carrousel-list').lastElementChild;
-   //获取图片数量
-   this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
    //默认参数配置
    this.Settings={
    	width:1000,  //幻灯片的宽度

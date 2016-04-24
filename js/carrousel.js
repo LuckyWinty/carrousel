@@ -1,9 +1,14 @@
 ;(function(){
 	window.onload=function(){
 		Carrousel.init(document.querySelectorAll('.carrousel-main'));
-	}
-	var Carousel=function(carrousel){
-		var calSelf=this;
+		var box = document.getElementById("box");
+		animate(box,"width",1050);
+		animate(box,"height",200);
+		animate(box,"left",400);
+	      // animate(box,"height",200);
+	  }
+	  var Carousel=function(carrousel){
+	  	var calSelf=this;
    //保存单个旋转图片对象
    this.carrousel=carrousel;
    this.carrouselItemMain=this.carrousel.querySelector('.carrousel-list');
@@ -11,10 +16,10 @@
    this.preBtn=this.carrousel.querySelector('.carrousel-btn-pre');
    this.nextBtn=this.carrousel.querySelector('.carrousel-btn-next');
       //获取图片数量
-   this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
-   if(this.carrouselItems.length%2==0){//偶数帧的时候，克隆第一个加到最后，形成奇数的形式
-      this.carrouselItemMain.appendChild(this.carrousel.querySelector('.carrousel-list').firstElementChild.cloneNode(true));
       this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
+   if(this.carrouselItems.length%2==0){//偶数帧的时候，克隆第一个加到最后，形成奇数的形式
+   	this.carrouselItemMain.appendChild(this.carrousel.querySelector('.carrousel-list').firstElementChild.cloneNode(true));
+   	this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
    };
    //获取第一张图片
    this.carrouselFir=this.carrousel.querySelector('.carrousel-list').firstElementChild;
@@ -46,13 +51,13 @@
    };
    //判断是否自动播放
    if(this.Settings.autoPlay){
-       this.autoPlay();
-       this.carrousel.onmouseover=function(){
-         window.clearInterval(calSelf.timer);
-       };
-       this.carrousel.onmouseout=function(){
-         calSelf.autoPlay();
-       };
+   	this.autoPlay();
+   	this.carrousel.onmouseover=function(){
+   		window.clearInterval(calSelf.timer);
+   	};
+   	this.carrousel.onmouseout=function(){
+   		calSelf.autoPlay();
+   	};
    };
 }
 Carousel.init=function(carrousels){
@@ -66,10 +71,10 @@ Carousel.init=function(carrousels){
    Carousel.prototype={
    	//自动播放
    	autoPlay:function(){
-   	 var _this=this;
-   	 this.timer=window.setInterval(function(){
-       _this.nextBtn.click();
-   	 },_this.Settings.timeSpan);
+   		var _this=this;
+   		this.timer=window.setInterval(function(){
+   			_this.nextBtn.click();
+   		},_this.Settings.timeSpan);
    	},
    	//旋转
    	carrouselRote:function(dir){
@@ -89,9 +94,15 @@ Carousel.init=function(carrousels){
    				var opa=pre.style.opacity;
    				var top=pre.style.top;
    				var left=pre.style.left;
-
+ 
    				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
    				setTimeout(function(){
+   					// animate(item,'width',width);
+   					// animate(item,'height',height);
+   					// animate(item,'opacity',opa);
+   					// animate(item,'top',top);
+   					// animate(item,'left',left);
+
    					item.style.width=width+'px';
    					item.style.height=height+'px';
    					item.style.zIndex=zIndex;
@@ -99,6 +110,7 @@ Carousel.init=function(carrousels){
    					item.style.top=top;
    					item.style.left=left;
    				});
+
    			});
    		}
    		if(dir=='right'){
@@ -118,7 +130,9 @@ Carousel.init=function(carrousels){
    				var opa=next.style.opacity;
    				var top=next.style.top;
    				var left=next.style.left;
-
+        
+                var le=left.toString().slice(0,left.toString().length-3);
+          
    				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
    				setTimeout(function(){
    					item.style.width=width+'px';
@@ -261,43 +275,42 @@ function extendObj(){//扩展对象
 function toArray(list){
 	return Array.prototype.slice.call(list);
 }
-//定义动画帧
-function startrun(obj,attr,target,fn){
-	clearInterval(obj.timer);
-	obj.timer = setInterval(function(){
-		var cur = 0;
-		if(attr == "opacity"){
-			cur = Math.round(parseFloat(getstyle(obj,attr))*100);
+//获取元素样式
+function getstyle(dom,name){
+	if(dom.currentStyle){
+		return dom.currentStyle[name];
+	}else{
+		return getComputedStyle(dom,false)[name];
+	}
+}
+//定义动画
+function animate(dom,attr,toStyle,fn){
+	// console.log('--------'+toStyle)
+	// clearInterval(dom.timer);
+	dom.timer=setInterval(function(){
+		var cur=0;
+		if(attr=='opacity'){
+			cur=Math.round(parseFloat(getstyle(dom,attr))*100);
 		}else{
-			cur = parseInt(getstyle(obj,attr));
+			cur=parseInt(getstyle(dom,attr));
 		}
-		var speed = (target-cur)/8;
-		speed = speed>0?Math.ceil(speed):Math.floor(speed);
+		var speed=(toStyle-cur)/18;
+		speed=speed>0?Math.ceil(speed):Math.floor(speed);
 
-		if(cur == target){
-			clearInterval(obj.timer);
+		if(cur==toStyle){
+			clearInterval(dom.timer);
 			if(fn){
 				fn();
 			}
 		}else{
-			if(attr == "opacity"){
-				obj.style.filter = "alpha(opacity="+(cur+speed)+")";
-				obj.style.opacity = (cur+speed)/100;
+			if(attr=='opacity'){
+				dom.style.filter='alpha(opacity=)'+(cur+speed)+')';
+				dom.style.opacity=(cur+speed)/100;
 			}else{
-				console.log('---------$'+attr);
-				obj.style[attr] = cur + speed + "px";
+				dom.style[attr]=cur+speed+'px';
 			}
 		}
-
-	},30)
-}
-//获取元素样式
-function getstyle(obj,name){
-	if(obj.currentStyle){
-		return obj.currentStyle[name];
-	}else{
-		return getComputedStyle(obj,false)[name];
-	}
+	},30);
 }
 window['Carrousel']=Carousel;
 })();

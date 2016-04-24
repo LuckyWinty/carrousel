@@ -41,3 +41,6 @@
 	top:0px;
 	left: 0px;
 }
+/**/
+#box{width:100px; height:100px; position:absolute;
+background:#06c; left:0;filter:alpha(opacity=30); opacity:0.3;}

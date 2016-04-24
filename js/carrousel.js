@@ -23,6 +23,8 @@
    	carrouselHeight:400, //幻灯片第一帧的高度
    	scale:0.9,//记录显示比例关系
    	speed:500,
+   	autoPlay:true,//是否自动播放
+   	timeSpan:3000,//自动播放时间间隔
    	verticalAlign:'middle'  //默认有top\middle\bottom
    };
    if(this.getSetting()){
@@ -37,6 +39,16 @@
    this.preBtn.onclick=function(){
    	calSelf.carrouselRote('right');
    };
+   //判断是否自动播放
+   if(this.Settings.autoPlay){
+       this.autoPlay();
+       this.carrousel.onmouseover=function(){
+         window.clearInterval(calSelf.timer);
+       };
+       this.carrousel.onmouseout=function(){
+         calSelf.autoPlay();
+       };
+   };
 }
 Carousel.init=function(carrousels){
 	var _this=this;
@@ -47,6 +59,13 @@ Carousel.init=function(carrousels){
        });
    }
    Carousel.prototype={
+   	//自动播放
+   	autoPlay:function(){
+   	 var _this=this;
+   	 this.timer=window.setInterval(function(){
+       _this.nextBtn.click();
+   	 },_this.Settings.timeSpan);
+   	},
    	//旋转
    	carrouselRote:function(dir){
    		var _this=this;
@@ -54,17 +73,11 @@ Carousel.init=function(carrousels){
    		if(dir=='left'){
    			toArray(this.carrouselItems).forEach(function(item,index,array){
    				var pre;
-   				var element=item;
    				if(item.previousElementSibling==null){
-   					console.log('111');
    					pre=_this.carrouselLat;
    				}else{
    					pre=item.previousElementSibling;
    				}
-   				// console.log(index+"------");
-   				console.log(item)
-   				// console.log(pre)
-   				console.log('----------------------')
    				var width=pre.offsetWidth;
    				var height=pre.offsetHeight;
    				var zIndex=pre.style.zIndex;
@@ -72,24 +85,45 @@ Carousel.init=function(carrousels){
    				var top=pre.style.top;
    				var left=pre.style.left;
 
-              console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
-              
-              // element.style.width=width+'px';
-              // element.style.height=height+'px';
-              // element.style.zIndex=zIndex;
-              // element.style.opacity=opa;
-              // element.style.top=top;
-              // element.style.left=left;
-              startrun(item,'width',width);
-              startrun(item,'height',height);
-              startrun(item,'zIndex',zIndex);
-              startrun(item,'opacity',opa);
-              startrun(item,'top',top);
-              startrun(item,'left',left);
-          });
+   				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
+   				setTimeout(function(){
+   					item.style.width=width+'px';
+   					item.style.height=height+'px';
+   					item.style.zIndex=zIndex;
+   					item.style.opacity=opa;
+   					item.style.top=top;
+   					item.style.left=left;
+   				});
+   			});
    		}
    		if(dir=='right'){
+   			toArray(this.carrouselItems).forEach(function(item,index,array){
+   				var next;
+   				if(item.nextElementSibling==null){
+   					next=_this.carrouselFir;
+   				}else{
+   					next=item.nextElementSibling;
+   				}
+   				// console.log(index+"------");
+   				// console.log(item)
+   				// console.log('----------------------')
+   				var width=next.offsetWidth;
+   				var height=next.offsetHeight;
+   				var zIndex=next.style.zIndex;
+   				var opa=next.style.opacity;
+   				var top=next.style.top;
+   				var left=next.style.left;
 
+   				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
+   				setTimeout(function(){
+   					item.style.width=width+'px';
+   					item.style.height=height+'px';
+   					item.style.zIndex=zIndex;
+   					item.style.opacity=opa;
+   					item.style.top=top;
+   					item.style.left=left;
+   				});
+   			});
    		}
    	},
    	//设置图片对齐方式
@@ -167,12 +201,10 @@ Carousel.init=function(carrousels){
         var lh=rightSlice[rightSlice.length-1].offsetHeight;
         /*此处有一个比较巧妙的地方就是leftSlice的第一张的尺寸实际上等于右边的最后一张*/
 
-        var leftIndex=level;
         var leftOpa=level;
         leftSlice.forEach(function(item,index,array){
-        	leftIndex--;
         	var i=index;
-        	item.style.zIndex=leftIndex;
+        	item.style.zIndex=i;
         	item.style.width=lw+'px';
         	item.style.height=lh+'px';
         	item.style.opacity=1/leftOpa;
@@ -226,41 +258,41 @@ function toArray(list){
 }
 //定义动画帧
 function startrun(obj,attr,target,fn){
-    clearInterval(obj.timer);
-    obj.timer = setInterval(function(){
-      var cur = 0;
-        if(attr == "opacity"){
-          cur = Math.round(parseFloat(getstyle(obj,attr))*100);
-        }else{
-          cur = parseInt(getstyle(obj,attr));
-        }
-      var speed = (target-cur)/8;
-        speed = speed>0?Math.ceil(speed):Math.floor(speed);
-        
-        if(cur == target){
-          clearInterval(obj.timer);
-            if(fn){
-              fn();
-            }
-        }else{
-          if(attr == "opacity"){
-                obj.style.filter = "alpha(opacity="+(cur+speed)+")";
-              obj.style.opacity = (cur+speed)/100;
-            }else{
-            	console.log('---------$'+attr);
-            obj.style[attr] = cur + speed + "px";
-            }
-        }
-        
-    },30)
+	clearInterval(obj.timer);
+	obj.timer = setInterval(function(){
+		var cur = 0;
+		if(attr == "opacity"){
+			cur = Math.round(parseFloat(getstyle(obj,attr))*100);
+		}else{
+			cur = parseInt(getstyle(obj,attr));
+		}
+		var speed = (target-cur)/8;
+		speed = speed>0?Math.ceil(speed):Math.floor(speed);
+
+		if(cur == target){
+			clearInterval(obj.timer);
+			if(fn){
+				fn();
+			}
+		}else{
+			if(attr == "opacity"){
+				obj.style.filter = "alpha(opacity="+(cur+speed)+")";
+				obj.style.opacity = (cur+speed)/100;
+			}else{
+				console.log('---------$'+attr);
+				obj.style[attr] = cur + speed + "px";
+			}
+		}
+
+	},30)
 }
 //获取元素样式
 function getstyle(obj,name){
-  if(obj.currentStyle){
-      return obj.currentStyle[name];
-    }else{
-      return getComputedStyle(obj,false)[name];
-    }
+	if(obj.currentStyle){
+		return obj.currentStyle[name];
+	}else{
+		return getComputedStyle(obj,false)[name];
+	}
 }
 window['Carrousel']=Carousel;
 })();

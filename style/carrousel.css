@@ -18,17 +18,22 @@
 	top:0px;
 	width:100px;
 	height:400px;
-	background-color: pink;
+	/*background-color: rgba(187,184,179,0.5);*/
+	/*background-color: black;*/
 	cursor: pointer;
 	opacity: 0.5;
 	z-index: 10;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 /*左右按钮*/
 .carrousel-btn-pre{
 	left:0px;
+	background-image: url('../img/btn_l.png');
 }
 .carrousel-btn-next{
 	right:0px;
+	background-image: url('../img/btn_r.png');
 }
 /*列表*/
 .carrousel-main .carrousel-list .carrousel-item{

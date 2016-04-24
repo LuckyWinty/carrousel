@@ -2,10 +2,6 @@
 	window.onload=function(){
 		Carrousel.init(document.querySelectorAll('.carrousel-main'));
 		var box = document.getElementById("box");
-		animate(box,"width",1050);
-		animate(box,"height",200);
-		animate(box,"left",400);
-	      // animate(box,"height",200);
 	  }
 	  var Carousel=function(carrousel){
 	  	var calSelf=this;
@@ -16,7 +12,7 @@
    this.preBtn=this.carrousel.querySelector('.carrousel-btn-pre');
    this.nextBtn=this.carrousel.querySelector('.carrousel-btn-next');
       //获取图片数量
-      this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
+   this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
    if(this.carrouselItems.length%2==0){//偶数帧的时候，克隆第一个加到最后，形成奇数的形式
    	this.carrouselItemMain.appendChild(this.carrousel.querySelector('.carrousel-list').firstElementChild.cloneNode(true));
    	this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
@@ -81,35 +77,54 @@ Carousel.init=function(carrousels){
    		var _this=this;
 
    		if(dir=='left'){
+        var tempWidth;
+        var tempHeight;
+        var tempZIndex;
+        var tempOpacity;
+        var tempTop;
+        var tempLeft;
+
    			toArray(this.carrouselItems).forEach(function(item,index,array){
    				var pre;
-   				if(item.previousElementSibling==null){
+   				if(index==0){
    					pre=_this.carrouselLat;
+            var width=pre.offsetWidth;
+            var height=pre.offsetHeight;
+            var zIndex=pre.style.zIndex;
+            var opa=pre.style.opacity;
+            var top=pre.style.top;
+            var left=pre.style.left;
    				}else{
-   					pre=item.previousElementSibling;
+            var width = tempWidth;
+            var height = tempHeight;
+            var zIndex = tempZIndex;
+            var opa = tempOpacity;
+            var top = tempTop;
+            var left = tempLeft;
    				}
-   				var width=pre.offsetWidth;
-   				var height=pre.offsetHeight;
-   				var zIndex=pre.style.zIndex;
-   				var opa=pre.style.opacity;
-   				var top=pre.style.top;
-   				var left=pre.style.left;
+
+          tempWidth = item.offsetWidth;
+          tempHeight = item.offsetHeight;
+          tempZIndex = item.style.zIndex;
+          tempOpacity = item.style.opacity;
+          tempTop = item.style.top;
+          tempLeft = item.style.left;
  
    				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
-   				setTimeout(function(){
+   				// setTimeout(function(){
    					// animate(item,'width',width);
    					// animate(item,'height',height);
    					// animate(item,'opacity',opa);
    					// animate(item,'top',top);
-   					// animate(item,'left',left);
+   					animate(item,'left',left);
 
    					item.style.width=width+'px';
    					item.style.height=height+'px';
    					item.style.zIndex=zIndex;
    					item.style.opacity=opa;
    					item.style.top=top;
-   					item.style.left=left;
-   				});
+   					// item.style.left=left;
+   				// });
 
    			});
    		}
@@ -285,8 +300,11 @@ function getstyle(dom,name){
 }
 //定义动画
 function animate(dom,attr,toStyle,fn){
-	// console.log('--------'+toStyle)
-	// clearInterval(dom.timer);
+
+	if(toStyle.toString().indexOf('p')!=-1){
+	toStyle=parseFloat(toStyle.toString().slice(0,(toStyle.toString().length-2)));
+	}
+	console.log(toStyle)
 	dom.timer=setInterval(function(){
 		var cur=0;
 		if(attr=='opacity'){
@@ -297,7 +315,7 @@ function animate(dom,attr,toStyle,fn){
 		var speed=(toStyle-cur)/18;
 		speed=speed>0?Math.ceil(speed):Math.floor(speed);
 
-		if(cur==toStyle){
+		if(Math.ceil(cur)==Math.ceil(toStyle)){
 			clearInterval(dom.timer);
 			if(fn){
 				fn();
@@ -310,7 +328,7 @@ function animate(dom,attr,toStyle,fn){
 				dom.style[attr]=cur+speed+'px';
 			}
 		}
-	},30);
+	},13);
 }
 window['Carrousel']=Carousel;
 })();

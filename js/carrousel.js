@@ -1,7 +1,9 @@
 ;(function(){
 	window.onload=function(){
 		Carrousel.init(document.querySelectorAll('.carrousel-main'));
-		var box = document.getElementById("box");
+	}
+	window.onunload=function(){
+		window.clearInterval(calSelf.timer);
 	}
 	var Carousel=function(carrousel){
 		var calSelf=this;
@@ -24,15 +26,14 @@
    this.rotateFlag=true;
    //默认参数配置
    this.Settings={
-   	width:1000,  //幻灯片的宽度
-   	height:400,  //幻灯片的高度
+	width:1000,  //幻灯片区域的宽度
+   	height:400,  //幻灯片区域的高度
    	carrouselWidth:700, //幻灯片第一帧的宽度
    	carrouselHeight:400, //幻灯片第一帧的高度
-   	scale:0.9,//记录显示比例关系
-   	speed:500,
+   	scale:0.9,//记录显示比例关系，例如第二张图比第一张图显示的时候宽高小多少
    	autoPlay:true,//是否自动播放
    	timeSpan:3000,//自动播放时间间隔
-   	verticalAlign:'middle'  //默认有top\middle\bottom
+   	verticalAlign:'middle'  //图片对齐方式，有top\middle\bottom三种方式，默认为middle
    };
    if(this.getSetting()){
    	this.Settings=extendObj(this.Settings,this.getSetting());
@@ -53,12 +54,12 @@
    };
    //判断是否自动播放
    if(this.Settings.autoPlay){
-   	this.autoPlay();
+   	this.autoPlay(calSelf.speed);
    	this.carrousel.onmouseover=function(){
    		window.clearInterval(calSelf.timer);
    	};
    	this.carrousel.onmouseout=function(){
-   		calSelf.autoPlay();
+   		calSelf.autoPlay(calSelf.speed);
    	};
    };
 }
@@ -195,10 +196,10 @@ Carousel.init=function(carrousels){
         this.nextBtn.style.zIndex=Math.ceil(this.carrouselItems.length/2);
         //第一帧相关设置
         this.carrouselFir.style.left=btnW+'px';
+        this.carrouselFir.style.top=this.setCarrouselAlign(this.Settings.carrouselHeight)+'px';
         this.carrouselFir.style.width=this.Settings.carrouselWidth+'px';
         this.carrouselFir.style.height=this.Settings.carrouselHeight+'px';
         this.carrouselFir.style.zIndex=Math.floor(this.carrouselItems.length/2);
-
     },
 	//设置除第一张之外的图片位置关系
 	setPic:function(){
@@ -212,7 +213,6 @@ Carousel.init=function(carrousels){
 		var rw=this.Settings.carrouselWidth;
 		var rh=this.Settings.carrouselHeight;
 		var gap=((this.Settings.width-this.Settings.carrouselWidth)/2)/level;
-
 
          //第一帧Left
          var firLeft=(this.Settings.width-this.Settings.carrouselWidth)/2;

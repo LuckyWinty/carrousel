@@ -1,8 +1,43 @@
+@charset "UTF-8";
+/*
+QQ:1159037199
+*/
+html {
+	font-family: "微软雅黑";
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	box-sizing: border-box;
+}
+
+a:active,
+a:hover {
+	outline: 0
+}
+a:hover {
+	color: #006699;
+}
+img {
+	border: none;
+	vertical-align: middle;
+	-ms-interpolation-mode: bicubic
+}
+ul,
+ol {
+	list-style: none outside none;
+	margin: 0px;
+	padding: 0px;
+}
+
+
 .carrousel-main{
 	position: relative;
 	width:1000px;
 	height:400px;
-	/*overflow: hidden;*/
 }
 .carrousel-main .carrousel-list{
 	width:inherit;
@@ -18,8 +53,6 @@
 	top:0px;
 	width:100px;
 	height:400px;
-	/*background-color: rgba(187,184,179,0.5);*/
-	/*background-color: black;*/
 	cursor: pointer;
 	opacity: 0.5;
 	z-index: 10;
@@ -41,6 +74,3 @@
 	top:0px;
 	left: 0px;
 }
-/**/
-#box{width:100px; height:100px; position:absolute;
-background:#06c; left:0;filter:alpha(opacity=30); opacity:0.3;}

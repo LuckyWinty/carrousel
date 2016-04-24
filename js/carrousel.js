@@ -2,9 +2,9 @@
 	window.onload=function(){
 		Carrousel.init(document.querySelectorAll('.carrousel-main'));
 		var box = document.getElementById("box");
-	  }
-	  var Carousel=function(carrousel){
-	  	var calSelf=this;
+	}
+	var Carousel=function(carrousel){
+		var calSelf=this;
    //保存单个旋转图片对象
    this.carrousel=carrousel;
    this.carrouselItemMain=this.carrousel.querySelector('.carrousel-list');
@@ -12,7 +12,7 @@
    this.preBtn=this.carrousel.querySelector('.carrousel-btn-pre');
    this.nextBtn=this.carrousel.querySelector('.carrousel-btn-next');
       //获取图片数量
-   this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
+      this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
    if(this.carrouselItems.length%2==0){//偶数帧的时候，克隆第一个加到最后，形成奇数的形式
    	this.carrouselItemMain.appendChild(this.carrousel.querySelector('.carrousel-list').firstElementChild.cloneNode(true));
    	this.carrouselItems=this.carrousel.querySelector('.carrousel-list').querySelectorAll('.carrousel-item');
@@ -21,6 +21,7 @@
    this.carrouselFir=this.carrousel.querySelector('.carrousel-list').firstElementChild;
    //获取最后一张图片
    this.carrouselLat=this.carrousel.querySelector('.carrousel-list').lastElementChild;
+   this.rotateFlag=true;
    //默认参数配置
    this.Settings={
    	width:1000,  //幻灯片的宽度
@@ -35,15 +36,20 @@
    };
    if(this.getSetting()){
    	this.Settings=extendObj(this.Settings,this.getSetting());
-   	// console.log(this.Settings);
    }
    this.setValue();
    this.setPic();
    this.nextBtn.onclick=function(){
-   	calSelf.carrouselRote('left');
+   	if(calSelf.rotateFlag){
+   		calSelf.rotateFlag=false;
+   		calSelf.carrouselRote('left');
+   	}
    };
    this.preBtn.onclick=function(){
-   	calSelf.carrouselRote('right');
+   	if(calSelf.rotateFlag){
+   		calSelf.rotateFlag=false;
+   		calSelf.carrouselRote('right');
+   	}
    };
    //判断是否自动播放
    if(this.Settings.autoPlay){
@@ -76,88 +82,87 @@ Carousel.init=function(carrousels){
    	carrouselRote:function(dir){
    		var _this=this;
 
-   		if(dir=='left'){
-        var tempWidth;
-        var tempHeight;
-        var tempZIndex;
-        var tempOpacity;
-        var tempTop;
-        var tempLeft;
+   		var tempWidth;
+   		var tempHeight;
+   		var tempZIndex;
+   		var tempOpacity;
+   		var tempTop;
+   		var tempLeft;
 
+   		if(dir=='left'){
    			toArray(this.carrouselItems).forEach(function(item,index,array){
    				var pre;
    				if(index==0){
    					pre=_this.carrouselLat;
-            var width=pre.offsetWidth;
-            var height=pre.offsetHeight;
-            var zIndex=pre.style.zIndex;
-            var opa=pre.style.opacity;
-            var top=pre.style.top;
-            var left=pre.style.left;
+   					var width=pre.offsetWidth;
+   					var height=pre.offsetHeight;
+   					var zIndex=pre.style.zIndex;
+   					var opa=pre.style.opacity;
+   					var top=pre.style.top;
+   					var left=pre.style.left;
    				}else{
-            var width = tempWidth;
-            var height = tempHeight;
-            var zIndex = tempZIndex;
-            var opa = tempOpacity;
-            var top = tempTop;
-            var left = tempLeft;
+   					var width = tempWidth;
+   					var height = tempHeight;
+   					var zIndex = tempZIndex;
+   					var opa = tempOpacity;
+   					var top = tempTop;
+   					var left = tempLeft;
    				}
 
-          tempWidth = item.offsetWidth;
-          tempHeight = item.offsetHeight;
-          tempZIndex = item.style.zIndex;
-          tempOpacity = item.style.opacity;
-          tempTop = item.style.top;
-          tempLeft = item.style.left;
- 
-   				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
-   				// setTimeout(function(){
-   					// animate(item,'width',width);
-   					// animate(item,'height',height);
-   					// animate(item,'opacity',opa);
-   					// animate(item,'top',top);
-   					animate(item,'left',left);
+   				tempWidth = item.offsetWidth;
+   				tempHeight = item.offsetHeight;
+   				tempZIndex = item.style.zIndex;
+   				tempOpacity = item.style.opacity;
+   				tempTop = item.style.top;
+   				tempLeft = item.style.left;
 
-   					item.style.width=width+'px';
-   					item.style.height=height+'px';
-   					item.style.zIndex=zIndex;
-   					item.style.opacity=opa;
-   					item.style.top=top;
+   				item.style.width=width+'px';
+   				item.style.height=height+'px';
+   				item.style.zIndex=zIndex;
+   				item.style.opacity=opa;
+   				item.style.top=top;
    					// item.style.left=left;
-   				// });
-
-   			});
+   					animate(item,'left',left,function(){
+   						_this.rotateFlag=true;
+   					});
+   				});
    		}
    		if(dir=='right'){
+   			tempWidth = _this.carrouselFir.offsetWidth;
+   			tempHeight = _this.carrouselFir.offsetHeight;
+   			tempZIndex = _this.carrouselFir.style.zIndex;
+   			tempOpacity = _this.carrouselFir.style.opacity;
+   			tempTop = _this.carrouselFir.style.top;
+   			tempLeft = _this.carrouselFir.style.left;
    			toArray(this.carrouselItems).forEach(function(item,index,array){
    				var next;
-   				if(item.nextElementSibling==null){
-   					next=_this.carrouselFir;
+   				if(index==(array.length-1)){ 				
+   					var width=tempWidth;
+   					var height=tempHeight;
+   					var zIndex=tempZIndex;
+   					var opa=tempOpacity;
+   					var top=tempTop;
+   					var left=tempLeft;
    				}else{
-   					next=item.nextElementSibling;
+   					var width  = item.nextElementSibling.offsetWidth;
+   					var height = item.nextElementSibling.offsetHeight;
+   					var zIndex = item.nextElementSibling.style.zIndex;
+   					var opa  = item.nextElementSibling.style.opacity;
+   					var top  = item.nextElementSibling.style.top;
+   					var left = item.nextElementSibling.style.left;
    				}
-   				// console.log(index+"------");
-   				// console.log(item)
-   				// console.log('----------------------')
-   				var width=next.offsetWidth;
-   				var height=next.offsetHeight;
-   				var zIndex=next.style.zIndex;
-   				var opa=next.style.opacity;
-   				var top=next.style.top;
-   				var left=next.style.left;
-        
-                var le=left.toString().slice(0,left.toString().length-3);
-          
-   				// console.log(width+'--'+height+'---'+zIndex+'---'+opa+'---'+top);
-   				setTimeout(function(){
-   					item.style.width=width+'px';
-   					item.style.height=height+'px';
-   					item.style.zIndex=zIndex;
-   					item.style.opacity=opa;
-   					item.style.top=top;
-   					item.style.left=left;
+
+
+   				item.style.width=width+'px';
+   				item.style.height=height+'px';
+   				item.style.zIndex=zIndex;
+   				item.style.opacity=opa;
+   				item.style.top=top;
+   					// item.style.left=left;
+   					animate(item,'left',left,function(){
+   						_this.rotateFlag=true;
+   					});
    				});
-   			});
    		}
    	},
    	//设置图片对齐方式
@@ -300,11 +305,11 @@ function getstyle(dom,name){
 }
 //定义动画
 function animate(dom,attr,toStyle,fn){
-
+	clearInterval(dom.timer);
 	if(toStyle.toString().indexOf('p')!=-1){
-	toStyle=parseFloat(toStyle.toString().slice(0,(toStyle.toString().length-2)));
+		toStyle=parseFloat(toStyle.toString().slice(0,(toStyle.toString().length-2)));
 	}
-	console.log(toStyle)
+
 	dom.timer=setInterval(function(){
 		var cur=0;
 		if(attr=='opacity'){

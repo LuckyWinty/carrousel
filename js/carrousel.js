@@ -44,8 +44,8 @@
    	if(calSelf.rotateFlag){
    		calSelf.rotateFlag=false;
    		calSelf.carrouselRote('left');
-   	}
-   };
+     	}
+   	};
    this.preBtn.onclick=function(){
    	if(calSelf.rotateFlag){
    		calSelf.rotateFlag=false;
@@ -123,9 +123,13 @@ Carousel.init=function(carrousels){
    				item.style.opacity=opa;
    				item.style.top=top;
    					// item.style.left=left;
-   					animate(item,'left',left,function(){
-   						_this.rotateFlag=true;
-   					});
+   					if(index==(array.length-1)){
+   						animate(item,'left',left,function(){
+   							_this.rotateFlag=true;
+   						});
+   					}else{
+   						animate(item,'left',left);
+   					}
    				});
    		}
    		if(dir=='right'){
@@ -160,9 +164,13 @@ Carousel.init=function(carrousels){
    				item.style.opacity=opa;
    				item.style.top=top;
    					// item.style.left=left;
-   					animate(item,'left',left,function(){
-   						_this.rotateFlag=true;
-   					});
+   					if(index==(array.length-1)){
+   						animate(item,'left',left,function(){
+   							_this.rotateFlag=true;
+   						});
+   					}else{
+   						animate(item,'left',left);
+   					}
    				});
    		}
    	},
@@ -324,6 +332,7 @@ function animate(dom,attr,toStyle,fn){
 			clearInterval(dom.timer);
 			if(fn){
 				fn();
+				console.log('重置标志');
 			}
 		}else{
 			if(attr=='opacity'){

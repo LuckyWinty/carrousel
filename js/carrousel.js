@@ -332,7 +332,6 @@ function animate(dom,attr,toStyle,fn){
 			clearInterval(dom.timer);
 			if(fn){
 				fn();
-				console.log('重置标志');
 			}
 		}else{
 			if(attr=='opacity'){
